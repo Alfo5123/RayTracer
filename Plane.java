@@ -20,22 +20,21 @@ public class Plane extends Shape
 	@Override
 	public boolean Intersect(Ray ray) 
 	{
+		Vector v = new Vector (  ray.getPos() , this.P  ) ;
 		ray.normalize();
-		Vector v = new Vector ( this.P  , ray.getPos() ) ;
+		//v.norm() ; 
+		this.Normal.normalize();
 		
-		// Check if parallel
-		if ( ray.getDir().dot(Normal)  < EPS ) return false ;
+		float den = ray.getDir().dot(this.Normal) ; 
 		
-		t = v.dot( Normal ) / ray.getDir().dot( Normal ) ;
+		// Check if crossing the plane
+		if ( den < EPS ) 
+		{
+			this.t = v.dot(this.Normal ) / den ;
+			return ( this.t >= 0 ) ; 
+		}
 		
-		return true ;
-		
-		/*
-		Vector v = new Vector ( this.P  , ray.getPos() ) ;
-		t = v.dot( Normal ) / ray.getDir().dot( Normal ) ;
-		//System.out.println( t );
-		return ( ray.getDir().dot(this.Normal) < EPS ) ; 
-		*/	
+		return false ;
 	};
 
 	@Override
