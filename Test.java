@@ -17,7 +17,7 @@ public class Test
 		( 
 				new Light 
 				( 
-						new Point3D( 30.0f , 50.0f, 80.0f) ,
+						new Point3D( 60.0f , 50.0f, 30.0f) ,
 						new Color ( 1.0f , 1.0f , 1.0f ) 
 				) 
 	    ) ;
@@ -112,16 +112,16 @@ public class Test
 		);
 		
 		*/
-		/*
+		
 		shapes.add
 		(
 				new Plane 
 				(
-						new Vector (  0.0f , 1.0f , 0.0f ) , 
-						new Point3D ( 0.0f , -40.0f , 0.0f ) ,
+						new Vector (  0.0f , 1.0f , 0.1f ) , 
+						new Point3D ( 0.0f , -50.0f , 0.0f ) ,
 						new Material
 			            (
-			                    new Color(0.14f , 0.5f, 0.2f ),
+			                    new Color(0.10f , 0.11f, 0.12f ),
 			                    new Color(0.5f, 0.8f, 0.2f),
 			                    new Color(0.3f, 0.2f, 0.2f),
 			                    20.5f,
@@ -131,7 +131,7 @@ public class Test
 				)
 		);
 		
-		*/
+		
 		
 		Renderer test = new Renderer 
 	    (	
@@ -142,6 +142,6 @@ public class Test
 		) ;		
 		
 		
-		test.writeImage("Image_03");
+		test.writeImage("Image_01");
 	}
 }
