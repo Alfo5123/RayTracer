@@ -101,5 +101,14 @@ public class Vector
 	{
 		return ( new Vector ( this.x * v.getX() , this.y * v.getY() , this.z * v.getZ() )  ) ;
 	};
+	
+	public Vector cross ( Vector v )
+	{
+		Vector w = new Vector ( this.y * v.getZ() - this.z * v.getY() , 
+								-this.x * v.getZ() + this.z * v.getX() ,
+								this.x * v.getY() - this.y * v.getX()
+							   ) ; 
+		return ( w ) ; 
+	}
 
 }
