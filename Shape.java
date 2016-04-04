@@ -1,3 +1,4 @@
+package RAYTRACER;
 
 public abstract class Shape 
 {
@@ -10,4 +11,4 @@ public abstract class Shape
     public abstract float getInter ( ) ;
     
     public abstract Material getMaterial() ; 
-};
+}
