@@ -1,3 +1,4 @@
+package RAYTRACER;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.io.File;
@@ -31,11 +32,11 @@ public class Renderer
 		
 		this.MAX_DEPTH = MAX_DEPTH ; 
 		
-	};
+	}
 	
 	public Vector Trace ( Ray dir , int depth )
 	{
-				dir.normalize();
+				dir.normalize() ;
 				// Check intersection with other Objects
 				float tmin = Float.MAX_VALUE ; 
 				int ind = -1 ; 
@@ -66,7 +67,7 @@ public class Renderer
 
 				// Normal Vector 
 				Vector N = this.scene.objects.get(ind).getNormal(Inter) ;
-				N.normalize();
+				N = N.normalize();
 				
 				// Bias
 				float bias = 0.01f ;
@@ -78,12 +79,11 @@ public class Renderer
 				
 				// Viewing vector (surface to eye) 
 				Vector V = new Vector ( Inter, new Point3D ( 0.0f , 0.0f, 0.0f ) ) ;
-				V.normalize(); 
+				V = V.normalize(); 
 				
 				// Material of Surface
 				Material m = this.scene.objects.get(ind).getMaterial() ;
 
-				
 				// Calculate Reflection Ray
 				Vector RL = dir.getDir().diff( N.prod( 2.0f*N.dot( dir.getDir() ) ) ) ;
 				Ray Reflection = new Ray ( Inter, RL ) ;
@@ -100,7 +100,7 @@ public class Renderer
 					// Vector from Surface to Light
 					Vector L = new Vector ( Inter, cur.getPos() ) ;
 					float L_2 = L.norm() ;
-					L.normalize();
+					L = L.normalize();
 					
 					Ray shadowray = new Ray ( Inter , L ) ; 
 					
@@ -170,6 +170,6 @@ public class Renderer
 
 	       try{ ImageIO.write(image0, "png", f); } catch (IOException ex) 
 	       { ex.printStackTrace(); }
-	   };
+	   }
 	
 }
