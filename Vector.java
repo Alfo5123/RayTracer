@@ -1,3 +1,4 @@
+package RAYTRACER;
 import java.lang.Math;
 import java.awt.Color;
 
@@ -6,8 +7,6 @@ public class Vector
 	private float x ; 
 	private float y ; 
 	private float z ; 
-	
-	public Vector ( ){ };
 	
 	public Vector ( float x , float y , float z )
 	{
@@ -45,62 +44,60 @@ public class Vector
 	public float getX ()
 	{
 		return this.x ; 
-	};
+	}
 	
 	public float getY ()
 	{
 		return this.y ; 
-	};
+	}
 	
 	public float getZ ()
 	{
 		return this.z ; 
-	};
+	}
 	
 	public float norm2 ( )
 	{
 		float l =  ( this.x * this.x ) + ( this.y * this.y ) + ( this.z * this.z ) ;
 		return l ;
-	};
+	}
 	
 	public float norm ( )
 	{
 		return ( float ) ( Math.sqrt ( this.norm2() ) ) ;
-	};
+	}
 	
-	public void normalize ( )
+	public Vector normalize ( )
 	{
 		float r = this.norm() ; 
-		this.x /= r ; 
-		this.y /= r ; 
-		this.z /= r ; 
-	};
+		return ( new Vector ( x / r , y / r , z / r ) ) ; 
+	}
 	
 	public float  dot ( Vector v )
 	{
 		float d = this.x * v.getX() + this.y * v.getY() + this.z * v.getZ() ; 
 		return d ;
-	};
+	}
 	
 	public Vector sum ( Vector v )
 	{
 		return ( new Vector ( this.x + v.getX(), this.y + v.getY() , this.z + v.getZ() )  ) ;
-	};
+	}
 	
 	public Vector diff ( Vector v )
 	{
 		return ( new Vector ( this.x - v.getX() , this.y - v.getY() , this.z - v.getZ() )  ) ;
-	};
+	}
 	
 	public Vector prod(  float t )
 	{
 		return ( new Vector ( this.x * t , this.y * t , this.z * t ) ) ;
-	};
+	}
 	
 	public Vector times ( Vector v )
 	{
 		return ( new Vector ( this.x * v.getX() , this.y * v.getY() , this.z * v.getZ() )  ) ;
-	};
+	}
 	
 	public Vector cross ( Vector v )
 	{
@@ -112,3 +109,4 @@ public class Vector
 	}
 
 }
+
