@@ -1,3 +1,4 @@
+package RAYTRACER;
 
 public class Triangle extends Shape
 {
@@ -9,15 +10,13 @@ public class Triangle extends Shape
 	public float t ; 
 	private float EPS = 0.0001f ;
 	
-	public Triangle(){};
-	
 	public Triangle( Point3D p1 , Point3D p2 , Point3D p3 , Material material  )
 	{
 		this.p1 = p1 ; 
 		this.p2 = p2 ; 
 		this.p3 = p3 ;
 		this.material = material ;
-	};
+	}
 	
 	@Override
 	public boolean Intersect(Ray ray)
@@ -61,10 +60,9 @@ public class Triangle extends Shape
 		    this.t = t;
 		    return true;
 		  }
-
 		  // No hit, no win
 		  return false;	
-	};
+	}
 
 	@Override
 	public Vector getNormal(Point3D p) 
