@@ -1,3 +1,4 @@
+package RAYTRACER;
 import java.lang.Math;
 
 public class Sphere extends Shape
@@ -10,15 +11,13 @@ public class Sphere extends Shape
 	
 	private float EPS = 1e-5f ;
 	
-	public Sphere(){} ; 
-	
 	public Sphere ( Point3D center , float radius , Material material )
 	{
 		this.center = center ; 
 		this.radius = radius ; 
 		this.material = material ;
 		this.radius2 = radius*radius ;
-	};
+	}
 	
 	@Override
 	public boolean Intersect( Ray ray ) 
@@ -41,34 +40,14 @@ public class Sphere extends Shape
 		t1 = p + thc;
 		
 		return true;
-	};
+	}
 	
 	@Override
 	public Vector getNormal ( Point3D p ) 
 	{
 		return ( new Vector ( this.center , p ) ) ;
-	};
-	
-	public void setT0 ( float t0 )
-	{ 
-		this.t0 = t0; 
-	};
-	
-	public float getT0 ( )
-	{ 
-		return t0 ; 
-	};
-	
-	public void setT1 ( float t1 )
-	{ 
-		this.t1 = t1; 
-	};
-	
-	public float getT1 ( )
-	{ 
-		return t1 ;
 	}
-
+	
 	@Override
 	public float getInter() 
 	{
@@ -80,6 +59,6 @@ public class Sphere extends Shape
 	public Material getMaterial() 
 	{
 		return this.material ;
-	};
+	}
 
 }
