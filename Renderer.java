@@ -36,53 +36,26 @@ public class Renderer
 	
 	public Vector Trace ( Ray dir , int depth )
 	{
-				dir.normalize() ;
-				// Check intersection with other Objects
-				float tmin = Float.MAX_VALUE ; 
-				int ind = -1 ; 
+				IntersectionResult IR = new IntersectionResult( dir , this.scene ) ;
 				
-				for ( int i = 0 ; i < this.scene.objects.size() ; i++ )
-				{
-					if ( this.scene.objects.get(i).Intersect( dir ) )
-					{
-						 float t =  this.scene.objects.get(i).getInter()  ;
-						 
-						 if ( t < tmin && t > 0.0001f ) // && t > 0.000001f
-						 {
-							 tmin = t;
-							 ind = i ; 
-						 } 
-					}
-				}
-				
-				if ( ind == -1 ) // No intersection
+				if ( IR.getIntersection() == null ) // No intersection
 				{
 					return ( new Vector ( 0.0f , 0.0f , 0.0f ) ) ; // Black Background
 				}
 				
 				// Intersection Point
-				Point3D Inter = new Point3D (   dir.getPos().getX() + tmin * dir.getDir().getX() ,
-												dir.getPos().getY() + tmin * dir.getDir().getY() , 
-												dir.getPos().getZ() + tmin * dir.getDir().getZ() ) ;
+				Point3D Inter = IR.getIntersection() ;
 
 				// Normal Vector 
-				Vector N = this.scene.objects.get(ind).getNormal(Inter) ;
+				Vector N = IR.getNorm() ;
 				N = N.normalize();
 				
-				// Bias
-				float bias = 0.01f ;
-				
-				// Slightly modifying intersection point
-				Inter = new Point3D ( Inter.getX() + bias * N.getX() ,
-									  Inter.getY() + bias * N.getY() ,
-									  Inter.getZ() + bias * N.getZ() ) ;
+				// Material of Surface
+				Material m = IR.getMaterial();
 				
 				// Viewing vector (surface to eye) 
 				Vector V = new Vector ( Inter, new Point3D ( 0.0f , 0.0f, 0.0f ) ) ;
 				V = V.normalize(); 
-				
-				// Material of Surface
-				Material m = this.scene.objects.get(ind).getMaterial() ;
 
 				// Calculate Reflection Ray
 				Vector RL = dir.getDir().diff( N.prod( 2.0f*N.dot( dir.getDir() ) ) ) ;
@@ -94,13 +67,11 @@ public class Renderer
 				// Return Direct Component
 				for ( int i = 0 ; i < this.scene.lights.size() ; i++ )
 				{
-				
 					Light cur = this.scene.lights.get(i) ; 
 					
 					// Vector from Surface to Light
 					Vector L = new Vector ( Inter, cur.getPos() ) ;
-					float L_2 = L.norm() ;
-					L = L.normalize();
+					float L_2 = L.norm() ; L = L.normalize();
 					
 					Ray shadowray = new Ray ( Inter , L ) ; 
 					
@@ -120,16 +91,25 @@ public class Renderer
 					{
 						Vector Lc = new Vector ( cur.getCol() ) ;
 						Vector R = N.prod(2.0f*N.dot(L)).diff(L) ;
-						// Phong Illumination Model Contribution with Attenuation
-						FinalColor = FinalColor.sum( Lc.times( m.getDiffuse().prod( Math.max(0.0f, L.dot(N) ) ).sum( m.getSpecular().prod( ( float ) Math.pow( ( double )( Math.max( 0.0f , R.dot(V) ) ) , ( double ) m.getPhongIndex() ) ) ) ) ).prod( 70.0f / L_2) ;
+						
+				    // Phong Illumination Model Contribution 
+						
+						// Diffusive Componente
+						FinalColor = FinalColor.sum( Lc.times( m.getDiffuse().prod( Math.max(0.0f, L.dot(N) ) ) ) ) ; 
+						// Specular component 
+						FinalColor = FinalColor.sum( m.getSpecular().prod( ( float ) Math.pow( ( double )( Math.max( 0.0f , R.dot(V) ) ) , ( double ) m.getPhongIndex() ) ) ) ;
+						// Atenuation
+						FinalColor = FinalColor.prod( 70.0f / L_2) ;
 					}
 				}
 				
 				// If depth is less than a maximum value
 				if ( depth < MAX_DEPTH ) FinalColor = FinalColor.sum ( Trace ( Reflection , depth + 1 ) );
-			
+				
+				// Ambient Component 
 				Vector ans = new Vector ( m.ambient ) ;
 				ans = ans.sum( FinalColor ) ;
+				
 				return new Vector ( Math.min(ans.getX(), 1.0f) ,  Math.min(ans.getY(), 1.0f) , Math.min(ans.getZ(), 1.0f) ) ;
 				
 	}
