@@ -3,23 +3,24 @@ import java.awt.Color;
 
 public class Light
 {
-	private Point3D pos ; 
-	private Color  col ; 
+	private Point3D Position ; 
+	private Color  Color ; 
 	
-	public Light( Point3D pos , Color col )
+	public Light( Point3D Position, Color Color )
 	{
-		this.pos = pos ; 
-		this.col = col ;
+		this.Position = Position ; 
+		this.Color = Color ;
 	}
 	
-	public Point3D getPos ( )
+	public Point3D getPosition ( )
 	{
-		return this.pos ;
+		return Position ;
 	}
 	
-	public Color getCol ( )
+	public Color getColor ( )
 	{
-		return this.col ;
+		return Color ;
 	}
 }
+
 
