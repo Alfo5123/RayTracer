@@ -2,29 +2,29 @@ package RAYTRACER;
 
 public class Point3D
 {
-	private float x ; 
-	private float y ; 
-	private float z ; 
+	private double X ; 
+	private double Y ; 
+	private double Z ; 
 	
-	public Point3D ( float x , float y , float z )
+	public Point3D ( double X , double Y , double Z )
 	{
-		this.x = x ; 
-		this.y = y ; 
-		this.z = z ; 
+		this.X = X ; 
+		this.Y = Y ; 
+		this.Z = Z ; 
 	}
 	
-	public float getX ( )
+	public double getX ( )
 	{
-		return this.x ; 
+		return X ; 
 	}
 	
-	public float getY ( )
+	public double getY ( )
 	{
-		return this.y ;
+		return Y ;
 	}
 	
-	public float getZ ( )
+	public double getZ ( )
 	{
-		return this.z ;
+		return Z ;
 	}
 }
