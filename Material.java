@@ -3,39 +3,37 @@ import java.awt.Color;
 
 public class Material 
 {
-	public Color ambient  ;
-	public Color diffuse ; 
-	public Color specular ; 
-	float reflectance ; 
-	float PhongIndex ; 
-
-	public Material (  Color ambient, Color diffuse , Color specular ,
-				       float reflectance, float PhongIndex)
+	private Color Ambient  ;
+	private Color Diffuse ; 
+	private Color Specular ; 
+	private double PhongIndex ; 
+	
+	
+	public Material ( Color Ambient, Color Diffuse , Color Specular , float PhongIndex )
 	{
-		this.ambient = ambient ; 
-		this.diffuse = diffuse ; 
-		this.specular = specular ;
-		this.reflectance = reflectance ; 
+		this.Ambient = Ambient ; 
+		this.Diffuse = Diffuse ; 
+		this.Specular = Specular ;
 		this.PhongIndex = PhongIndex ; 
 	}
 	
-	public Vector getAmbient( )
+	public Vector getAmbientComponent ( )
 	{
-		return new Vector ( ambient ) ; 
+		return new Vector ( Ambient ) ; 
 	}
 	
-	public Vector getDiffuse ( )
+	public Vector getDiffuseComponent ( )
 	{
-		return new Vector ( diffuse ) ; 
+		return new Vector ( Diffuse ) ; 
 	}
 	
-	public Vector getSpecular ( )
+	public Vector getSpecularComponent ( )
 	{
-		return new Vector ( specular ) ;
+		return new Vector ( Specular ) ;
 	}
 	
-	public float getPhongIndex()
+	public double getPhongIndex()
 	{
-		return this.PhongIndex ;
+		return PhongIndex ;
 	}
 }
