@@ -2,28 +2,27 @@ package RAYTRACER;
 
 public class Ray 
 {
-	private Point3D pos ; // Position 
-	private Vector  dir ; // Direction
+	private Point3D Position ; 
+	private Vector  Direction ; 
 	
-	public Ray ( Point3D pos , Vector dir )
+	public Ray ( Point3D Position , Vector Direction )
 	{
-		this.pos = pos ; 
-		this.dir = dir ; 
+		this.Position = Position ; 
+		this.Direction = Direction ; 
 	}
 	
-	public Point3D getPos ( )
+	public Point3D getPosition ( )
 	{
-		return this.pos ; 
+		return Position ; 
 	}
 	
-	public Vector getDir( )
+	public Vector getDirection( )
 	{
-		return this.dir ;
+		return Direction ;
 	}
 	
 	public void normalize()
 	{
-		this.dir = dir.normalize() ;
+		Direction = Direction.normalize() ;
 	}
-
 }
