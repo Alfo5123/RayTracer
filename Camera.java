@@ -3,23 +3,22 @@ import java.lang.Math;
 
 public class Camera 
 {
-	private float angle ; 
-	private float wh ;  
+	private double Angle ; 
+	private double WidthHeightRatio ;  
 	
-	public Camera ( float fov , int width , int height ) 
+	public Camera ( double fov , int width , int height ) 
 	{
-		this.angle = ( float ) ( Math.tan( Math.PI * 0.5f * fov / 180.0f) );
-		this.wh = (float)(width) / (float)( height ) ;
+		Angle = Math.tan( Math.PI * 0.5f * fov / 180.0f);
+		WidthHeightRatio  = (double)width/(double)height;
 	}
 	
-	public float getAngle()
+	public double getWidthHeightRatio ( )
 	{
-		return this.angle ; 
+		return WidthHeightRatio  ;
 	}
 	
-	public float getWH( )
+	public double getAngle()
 	{
-		return this.wh ;
+		return Angle ;
 	}
-
 }
