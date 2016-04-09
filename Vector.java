@@ -4,109 +4,107 @@ import java.awt.Color;
 
 public class Vector 
 {
-	private float x ; 
-	private float y ; 
-	private float z ; 
+	private double X ; 
+	private double Y ; 
+	private double Z ; 
 	
-	public Vector ( float x , float y , float z )
+	public Vector ( double X , double Y , double Z )
 	{
-		this.x = x ;
-		this.y = y ; 
-		this.z = z ; 
+		this.X = X ;
+		this.Y = Y ; 
+		this.Z = Z ; 
 	};
 	
 	public Vector ( Point3D p1 , Point3D p2 )
 	{
-		this.x =  p2.getX() - p1.getX() ; 
-		this.y =  p2.getY() - p1.getY() ;  
-		this.z =  p2.getZ() - p1.getZ() ; 
-	};
+		this.X =  p2.getX() - p1.getX() ; 
+		this.Y =  p2.getY() - p1.getY() ;  
+		this.Z =  p2.getZ() - p1.getZ() ; 
+	}
 	
 	public Vector ( Point3D p )
 	{
-		this.x = p.getX() ; 
-		this.y = p.getY() ; 
-		this.z = p.getZ() ; 
-	};
+		this.X = p.getX() ; 
+		this.Y = p.getY() ; 
+		this.Z = p.getZ() ; 
+	}
 	
 	public Vector ( Color c )
 	{
-		this.x = ( float ) ( c.getRed() ) / 255.0f  ; 
-		this.y = ( float ) ( c.getGreen() ) / 255.0f  ;  
-		this.z = ( float ) ( c.getBlue() ) / 255.0f  ; 
-	};
+		this.X = ( double )c.getRed() / 255.0f  ; 
+		this.Y = ( double )c.getGreen() / 255.0f  ;  
+		this.Z = ( double )c.getBlue() / 255.0f  ; 
+	}
 	
 	public Color toColor ( )
 	{
-		return new Color ( this.x , this.y , this.z ) ;
+		return new Color (( float )X , (float)Y , (float)Z);
 	}
 	
-	public float getX ()
+	public double getX ()
 	{
-		return this.x ; 
+		return X ; 
 	}
 	
-	public float getY ()
+	public double getY ()
 	{
-		return this.y ; 
+		return Y ; 
 	}
 	
-	public float getZ ()
+	public double getZ ()
 	{
-		return this.z ; 
+		return Z ; 
 	}
 	
-	public float norm2 ( )
+	public double norm2 ( )
 	{
-		float l =  ( this.x * this.x ) + ( this.y * this.y ) + ( this.z * this.z ) ;
+		double l =  X*X + Y*Y + Z*Z ;
 		return l ;
 	}
 	
-	public float norm ( )
+	public double norm ( )
 	{
-		return ( float ) ( Math.sqrt ( this.norm2() ) ) ;
+		return  Math.sqrt ( this.norm2() ) ;
 	}
 	
 	public Vector normalize ( )
 	{
-		float r = this.norm() ; 
-		return ( new Vector ( x / r , y / r , z / r ) ) ; 
+		double r = this.norm() ; 
+		return new Vector ( X / r , Y / r , Z / r ) ; 
 	}
 	
-	public float  dot ( Vector v )
+	public double  dot ( Vector v )
 	{
-		float d = this.x * v.getX() + this.y * v.getY() + this.z * v.getZ() ; 
+		double d = X * v.getX() + Y * v.getY() + Z * v.getZ() ; 
 		return d ;
 	}
 	
 	public Vector sum ( Vector v )
 	{
-		return ( new Vector ( this.x + v.getX(), this.y + v.getY() , this.z + v.getZ() )  ) ;
+		return new Vector ( X + v.getX(), Y + v.getY() , Z + v.getZ() ) ;
 	}
 	
 	public Vector diff ( Vector v )
 	{
-		return ( new Vector ( this.x - v.getX() , this.y - v.getY() , this.z - v.getZ() )  ) ;
+		return new Vector ( X - v.getX() , Y - v.getY() , Z - v.getZ() )  ;
 	}
 	
-	public Vector prod(  float t )
+	public Vector prod(  double t )
 	{
-		return ( new Vector ( this.x * t , this.y * t , this.z * t ) ) ;
+		return new Vector ( X * t , Y * t , Z * t ) ;
 	}
 	
 	public Vector times ( Vector v )
 	{
-		return ( new Vector ( this.x * v.getX() , this.y * v.getY() , this.z * v.getZ() )  ) ;
+		return new Vector ( X * v.getX() , Y * v.getY() , Z * v.getZ() );
 	}
 	
 	public Vector cross ( Vector v )
 	{
-		Vector w = new Vector ( this.y * v.getZ() - this.z * v.getY() , 
-								-this.x * v.getZ() + this.z * v.getX() ,
-								this.x * v.getY() - this.y * v.getX()
-							   ) ; 
-		return ( w ) ; 
+		Vector w = new Vector ( Y * v.getZ() - Z * v.getY() , 
+					-X * v.getZ() + Z * v.getX() ,
+					X * v.getY() - Y * v.getX() ) ; 
+		return w ; 
 	}
 
 }
-
