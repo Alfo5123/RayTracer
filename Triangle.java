@@ -2,86 +2,83 @@ package RAYTRACER;
 
 public class Triangle extends Shape
 {
-	public Point3D p1 ; 
-	public Point3D p2 ; 
-	public Point3D p3 ; 
-	public Material material ; 
+	public Point3D P1 ; 
+	public Point3D P2 ; 
+	public Point3D P3 ; 
+	public Material Material ; 
 	
-	public float t ; 
-	private float EPS = 0.0001f ;
-	
-	public Triangle( Point3D p1 , Point3D p2 , Point3D p3 , Material material  )
+	public Triangle( Point3D P1 , Point3D P2 , Point3D P3 , Material Material  )
 	{
-		this.p1 = p1 ; 
-		this.p2 = p2 ; 
-		this.p3 = p3 ;
-		this.material = material ;
+		this.P1 = P1 ; 
+		this.P2 = P2 ; 
+		this.P3 = P3 ; 
+		this.Material = Material ;
 	}
 	
 	@Override
-	public boolean Intersect(Ray ray)
+	public IntersectionResult Intersect(Ray ray)
 	{
 		// Möller–Trumbore intersection algorithm
 		
-		Vector e1 = new Vector ( this.p1 , this.p2 ) ;
-		Vector e2 = new Vector ( this.p1 , this.p3 ) ;
+		double EPS = 0.0001f ;
+		
+		Vector e1 = new Vector ( P1 , P2 ) ;
+		Vector e2 = new Vector ( P1 , P3 ) ;
 		
 		//Begin calculating determinant - also used to calculate u parameter
-		Vector P = ray.getDir().cross(e2) ;
+		Vector P = ray.getDirection().cross(e2) ;
 		//if determinant is near zero, ray lies in plane of triangle
-		float det = e1.dot(P) ; 
+		double det = e1.dot(P) ; 
 		//NOT CULLING
-		if(det > -EPS && det < EPS ) return false ;
+		if(det > -EPS && det < EPS ) new IntersectionResult ( null, null, null );
 		
-		float inv_det = 1.0f / det ; 
+		double inv_det = 1.0f / det ; 
 		
 		// Calculate distance from V1 to ray origin
-		Vector T = new Vector ( this.p1, ray.getPos()  ) ;
+		Vector T = new Vector ( P1 , ray.getPosition()  ) ;
 		
 		// Calculate u parameter and test bound
-		 float u = T.dot(P) * inv_det;
+		 double u = T.dot(P) * inv_det;
 		 
 		 // The intersection lies outside of the triangle
-		 if(u < 0.0f || u > 1.0f) return false ; 
+		 if(u < 0.0f || u > 1.0f) new IntersectionResult ( null, null, null ); 
 
 		 //Prepare to test v parameter
 		 Vector Q = T.cross(e1) ;
 
 		 //Calculate V parameter and test bound
-		 float v = ray.getDir().dot(Q) * inv_det;
+		 double v = ray.getDirection().dot(Q) * inv_det;
 		 
 		 // The intersection lies outside of the triangle
-		 if( v < 0.0f || u + v  > 1.0f ) return false;
+		 if( v < 0.0f || u + v  > 1.0f ) new IntersectionResult ( null, null, null );
 
-		 float t = e2.dot(Q) * inv_det;
+		 double t = e2.dot(Q) * inv_det;
 
 		  if(t > EPS ) 
-		  { //ray intersection
-		    this.t = t;
-		    return true;
+		  { 
+			//Ray intersection
+			  
+			 // Calculate Point of Intersection
+			  Point3D Intersection = new Point3D (    ray.getPosition().getX() + t * ray.getDirection().getX() ,
+								  ray.getPosition().getY() + t * ray.getDirection().getY() , 
+								  ray.getPosition().getZ() + t * ray.getDirection().getZ() ) ; 
+			  
+			 // Calculate normalized Normal Vector at the Point of Intersection
+			  Vector x = new Vector ( P1 , P2 ) ;
+			  Vector y = new Vector ( P1 , P3 ) ;
+		      Vector Normal = x.cross(y).normalize() ;
+		      
+		     // Slightly modify the intersection point to avoid precision issues
+			  double bias = 0.01f ;
+			  Intersection = new Point3D (  Intersection.getX() + bias * Normal.getX() ,
+							Intersection.getY() + bias * Normal.getY() ,
+							Intersection.getZ() + bias * Normal.getZ() ) ;
+			  
+			  return new IntersectionResult( Intersection, Normal, Material ) ;
+		      
+		      
 		  }
 		  // No hit, no win
-		  return false;	
+		  return new IntersectionResult ( null, null, null );	
 	}
-
-	@Override
-	public Vector getNormal(Point3D p) 
-	{
-		Vector u = new Vector ( this.p1 , this.p2 ) ;
-		Vector v = new Vector ( this.p1 , this.p3 ) ;
-		return  ( u.cross(v) ) ;
-	}
-
-	@Override
-	public float getInter() 
-	{
-		return this.t ; 
-	}
-
-	@Override
-	public Material getMaterial() 
-	{
-		return this.material ;
-	}
-	
 }
