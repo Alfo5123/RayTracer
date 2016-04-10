@@ -3,62 +3,56 @@ import java.lang.Math;
 
 public class Sphere extends Shape
 {
-	public Point3D center ; 
-	public float radius ; 
-	private float radius2 ;
-	private float t0 ; 
-	private float t1 ; 
+	private Point3D Center ; 
+	private double Radius2 ; 
 	
-	private float EPS = 1e-5f ;
-	
-	public Sphere ( Point3D center , float radius , Material material )
+	public Sphere ( Point3D Center , double Radius , Material Material )
 	{
-		this.center = center ; 
-		this.radius = radius ; 
-		this.material = material ;
-		this.radius2 = radius*radius ;
+		this.Center = Center ; 
+		this.Material = Material ;
+		this.Radius2 = Radius*Radius ;
 	}
 	
 	@Override
-	public boolean Intersect( Ray ray ) 
+	public IntersectionResult Intersect( Ray ray ) 
 	{
-		Vector beam = new Vector ( ray.getPos() , this.center  ) ;
-		float p =  beam.dot( ray.getDir() );
+		Vector beam = new Vector ( ray.getPosition() , Center  ) ;
+		double p =  beam.dot( ray.getDirection() );
 		
 		// Another direction of the beam
-		if ( p < 0 ) return false; 
+		if ( p < 0 ) return new IntersectionResult(null,null,null) ; 
 		
-		float d2 = beam.dot(beam) - p * p;
+		double d2 = beam.dot(beam) - p * p;
 		
 		// / If doesn't touch the sphere
-		if ( d2 > radius2 ) return false; 
+		if ( d2 > Radius2 ) return new IntersectionResult(null,null,null) ;
 		
-		float thc = ( float ) ( Math.sqrt(radius2 - d2) ) ;
+		double thc = Math.sqrt(Radius2 - d2)  ;
 		
 		// Calculate two points of intersection with sphere
-		t0 = p - thc;
-		t1 = p + thc;
+		double t0 = p - thc;
+		double t1 = p + thc;
 		
-		return true;
-	}
-	
-	@Override
-	public Vector getNormal ( Point3D p ) 
-	{
-		return ( new Vector ( this.center , p ) ) ;
-	}
-	
-	@Override
-	public float getInter() 
-	{
-		if ( this.t0 < EPS ) this.t0 = this.t1 ; 
-		return  ( this.t0 );
-	}
-
-	@Override
-	public Material getMaterial() 
-	{
-		return this.material ;
+		// Consider the case first intersection behind the light
+		if ( t0 < 1e-5f ) t0 = t1 ; 
+		
+		// Calculate Point of Intersection
+		Point3D Intersection = new Point3D (    ray.getPosition().getX() + t0 * ray.getDirection().getX() ,
+							ray.getPosition().getY() + t0 * ray.getDirection().getY() , 
+							ray.getPosition().getZ() + t0 * ray.getDirection().getZ() ) ;	
+		
+		// Calculate normalized Normal Vector at the Point of Intersection
+		Vector Normal = new Vector ( Center, Intersection ) ; 
+		Normal = Normal.normalize() ; 
+		
+		// Slightly modify the intersection point to avoid precision issues
+		double bias = 0.01f ;
+		Intersection = new Point3D (  Intersection.getX() + bias * Normal.getX() ,
+					      Intersection.getY() + bias * Normal.getY() ,
+					      Intersection.getZ() + bias * Normal.getZ() ) ;
+		
+		// Return intersection characteristics
+		return new IntersectionResult(Intersection, Normal, Material) ;
 	}
 
 }
