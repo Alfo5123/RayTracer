@@ -66,17 +66,16 @@ public class Triangle extends Shape
 			 // Calculate normalized Normal Vector at the Point of Intersection
 			  Vector x = new Vector ( P1 , P2 ) ;
 			  Vector y = new Vector ( P1 , P3 ) ;
-		      Vector Normal = x.cross(y).normalize() ;
+		          Vector Normal = x.cross(y).normalize() ;
 		      
-		     // Slightly modify the intersection point to avoid precision issues
+		        // Slightly modify the intersection point to avoid precision issues
 			  double bias = 0.01f ;
 			  Intersection = new Point3D (  Intersection.getX() + bias * Normal.getX() ,
 							Intersection.getY() + bias * Normal.getY() ,
 							Intersection.getZ() + bias * Normal.getZ() ) ;
 			  
 			  return new IntersectionResult( Intersection, Normal, Material ) ;
-		      
-		      
+		     
 		  }
 		  // No hit, no win
 		  return new IntersectionResult ( null, null, null );	
