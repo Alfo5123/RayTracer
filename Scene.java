@@ -1,17 +1,33 @@
-package RAYTRACER;
+package raytracer;
 import java.util.List;
 
 public class Scene 
 {
-	public Camera camera ; 
-	public List<Light> lights ; 
-	public List<Shape> objects ;
+	private Camera Camera ; 
+	private List<Light> Lights ; 
+	private List<Shape> Objects ;
 	
-	public Scene ( Camera camera, List<Light> lights , List<Shape> objects )
+	public Scene ( Camera Camera, List<Light> Lights , List<Shape> Objects )
 	{
-		this.camera = camera ; 
-		this.lights = lights ; 
-		this.objects = objects ;
+		this.Camera = Camera ; 
+		this.Lights = Lights ; 
+		this.Objects = Objects ;
+	}
+	
+	public Camera getCamera()
+	{
+		return Camera ;
+	}
+	
+	public List<Light> getLights()
+	{
+		return Lights ;
+	}
+	
+	public List<Shape> getObjects()
+	{
+		return Objects ;
 	}
 }
+
 
