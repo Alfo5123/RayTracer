@@ -1,4 +1,4 @@
-package RAYTRACER;
+package raytracer;
 import java.lang.Math;
 import java.awt.Color;
 
@@ -73,7 +73,7 @@ public class Vector
 		return new Vector ( X / r , Y / r , Z / r ) ; 
 	}
 	
-	public double  dot ( Vector v )
+	public double dot ( Vector v )
 	{
 		double d = X * v.getX() + Y * v.getY() + Z * v.getZ() ; 
 		return d ;
@@ -105,6 +105,11 @@ public class Vector
 					-X * v.getZ() + Z * v.getX() ,
 					X * v.getY() - Y * v.getX() ) ; 
 		return w ; 
+	}
+	
+	public Vector saturate( )
+	{
+		 return new Vector( Math.min(X, 1.0f) ,  Math.min(Y, 1.0f) , Math.min(Z, 1.0f) ) ;
 	}
 
 }
