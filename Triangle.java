@@ -1,4 +1,4 @@
-package RAYTRACER;
+package raytracer;
 
 public class Triangle extends Shape
 {
@@ -16,7 +16,7 @@ public class Triangle extends Shape
 	}
 	
 	@Override
-	public IntersectionResult Intersect(Ray ray)
+	public IntersectionResult intersect(Ray ray)
 	{
 		// Möller–Trumbore intersection algorithm
 		
@@ -54,7 +54,7 @@ public class Triangle extends Shape
 
 		 double t = e2.dot(Q) * inv_det;
 
-		  if(t > EPS ) 
+		  if( t > EPS ) 
 		  { 
 			//Ray intersection
 			  
@@ -66,16 +66,18 @@ public class Triangle extends Shape
 			 // Calculate normalized Normal Vector at the Point of Intersection
 			  Vector x = new Vector ( P1 , P2 ) ;
 			  Vector y = new Vector ( P1 , P3 ) ;
-		          Vector Normal = x.cross(y).normalize() ;
+		      Vector Normal = x.cross(y);
+		      Normal = Normal.normalize() ;
 		      
-		        // Slightly modify the intersection point to avoid precision issues
+		     // Slightly modify the intersection point to avoid precision issues
 			  double bias = 0.01f ;
 			  Intersection = new Point3D (  Intersection.getX() + bias * Normal.getX() ,
-							Intersection.getY() + bias * Normal.getY() ,
+						        Intersection.getY() + bias * Normal.getY() ,
 							Intersection.getZ() + bias * Normal.getZ() ) ;
 			  
 			  return new IntersectionResult( Intersection, Normal, Material ) ;
-		     
+		      
+		      
 		  }
 		  // No hit, no win
 		  return new IntersectionResult ( null, null, null );	
