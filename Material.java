@@ -1,4 +1,4 @@
-package RAYTRACER;
+package raytracer;
 import java.awt.Color;
 
 public class Material 
