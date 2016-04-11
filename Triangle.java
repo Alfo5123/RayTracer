@@ -30,7 +30,7 @@ public class Triangle extends Shape
 		//if determinant is near zero, ray lies in plane of triangle
 		double det = e1.dot(P) ; 
 		//NOT CULLING
-		if(det > -EPS && det < EPS ) new IntersectionResult ( null, null, null );
+		if(det > -EPS && det < EPS ) return new IntersectionResult ( null, null, null );
 		
 		double inv_det = 1.0f / det ; 
 		
@@ -41,7 +41,7 @@ public class Triangle extends Shape
 		 double u = T.dot(P) * inv_det;
 		 
 		 // The intersection lies outside of the triangle
-		 if(u < 0.0f || u > 1.0f) new IntersectionResult ( null, null, null ); 
+		 if(u < 0.0f || u > 1.0f) return new IntersectionResult ( null, null, null ); 
 
 		 //Prepare to test v parameter
 		 Vector Q = T.cross(e1) ;
@@ -50,7 +50,7 @@ public class Triangle extends Shape
 		 double v = ray.getDirection().dot(Q) * inv_det;
 		 
 		 // The intersection lies outside of the triangle
-		 if( v < 0.0f || u + v  > 1.0f ) new IntersectionResult ( null, null, null );
+		 if( v < 0.0f || u + v  > 1.0f ) return new IntersectionResult ( null, null, null );
 
 		 double t = e2.dot(Q) * inv_det;
 
@@ -66,13 +66,13 @@ public class Triangle extends Shape
 			 // Calculate normalized Normal Vector at the Point of Intersection
 			  Vector x = new Vector ( P1 , P2 ) ;
 			  Vector y = new Vector ( P1 , P3 ) ;
-		      Vector Normal = x.cross(y);
-		      Normal = Normal.normalize() ;
+		          Vector Normal = x.cross(y);
+		          Normal = Normal.normalize() ;
 		      
 		     // Slightly modify the intersection point to avoid precision issues
 			  double bias = 0.01f ;
 			  Intersection = new Point3D (  Intersection.getX() + bias * Normal.getX() ,
-						        Intersection.getY() + bias * Normal.getY() ,
+							Intersection.getY() + bias * Normal.getY() ,
 							Intersection.getZ() + bias * Normal.getZ() ) ;
 			  
 			  return new IntersectionResult( Intersection, Normal, Material ) ;
