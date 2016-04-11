@@ -1,4 +1,4 @@
-package RAYTRACER;
+package raytracer;
 import java.lang.Math;
 
 public class Camera 
