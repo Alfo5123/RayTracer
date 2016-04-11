@@ -1,69 +1,37 @@
-package RAYTRACER;
+package raytracer;
 
 public class IntersectionResult 
 {
-	private Point3D Inter = null ; 
-	private Vector N = null ; 
-	private Material material = null ; 
+	private Point3D Intersection;; 
+	private Vector Normal;
+	private Material Material;
 	
-	public IntersectionResult ( Ray ray , Scene scene )
+	public IntersectionResult( )
 	{
-		ray.normalize() ;
-		
-		// Check intersection with other Objects
-		float tmin = Float.MAX_VALUE ; 
-		int ind = -1 ; 
-		
-		for ( int i = 0 ; i < scene.objects.size() ; i++ )
-		{
-			if ( scene.objects.get(i).Intersect( ray ) )
-			{
-				 float t =  scene.objects.get(i).getInter()  ;
-				 
-				 if ( t < tmin && t > 0.0001f ) // && t > 0.000001f
-				 {
-					 tmin = t;
-					 ind = i ; 
-				 } 
-			}
-		}
-		
-		// Intersection Point
-		Point3D Inter = new Point3D (   ray.getPos().getX() + tmin * ray.getDir().getX() ,
-										ray.getPos().getY() + tmin * ray.getDir().getY() , 
-										ray.getPos().getZ() + tmin * ray.getDir().getZ() ) ;
-
-		if ( ind != -1 )
-		{
-			// Normal Vector 
-			Vector N = scene.objects.get(ind).getNormal(Inter) ;
-			this.N = N.normalize();
-			
-			// Bias
-			float bias = 0.01f ;
-			
-			// Slightly modifying intersection point
-			this.Inter = new Point3D (  Inter.getX() + bias * N.getX() ,
-								  		            Inter.getY() + bias * N.getY() ,
-								  		            Inter.getZ() + bias * N.getZ() ) ;
-			
-			this.material = scene.objects.get(ind).getMaterial() ;
-		}
-		
+		this.Intersection = null ; 
+		this.Normal = null ; 
+		this.Material = null ; 
 	}
 	
-	public Vector getNorm ( )
+	public IntersectionResult( Point3D Intersection , Vector Normal , Material Material )
 	{
-		return this.N ; 
+		this.Intersection = Intersection; 
+		this.Normal = Normal; 
+		this.Material = Material; 
+	}
+	
+	public Vector getNormalVector ( )
+	{
+		return Normal ; 
 	}
 	
 	public Point3D getIntersection ( )
 	{
-		return this.Inter ; 
+		return Intersection ; 
 	}
 	
 	public Material getMaterial ( )
 	{
-		return this.material ;
+		return Material ;
 	}
 }
