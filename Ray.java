@@ -1,4 +1,4 @@
-package RAYTRACER;
+package raytracer;
 
 public class Ray 
 {
