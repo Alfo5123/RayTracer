@@ -1,4 +1,4 @@
-package RAYTRACER;
+package raytracer;
 
 public class Plane extends Shape
 {
@@ -13,7 +13,7 @@ public class Plane extends Shape
 	}
 
 	@Override
-	public IntersectionResult  Intersect(Ray ray) 
+	public IntersectionResult  intersect (Ray ray) 
 	{
 		Vector v = new Vector (  ray.getPosition() , P  ) ;
 		ray.normalize();
