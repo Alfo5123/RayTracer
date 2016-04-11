@@ -1,8 +1,8 @@
-package RAYTRACER;
+package raytracer;
 
 public abstract class Shape 
 {
 	public Material Material;
 
-    	public abstract IntersectionResult Intersect( Ray ray );
+    	public abstract IntersectionResult intersect( Ray ray );
 }
