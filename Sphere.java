@@ -1,4 +1,4 @@
-package RAYTRACER;
+package raytracer;
 import java.lang.Math;
 
 public class Sphere extends Shape
@@ -14,7 +14,7 @@ public class Sphere extends Shape
 	}
 	
 	@Override
-	public IntersectionResult Intersect( Ray ray ) 
+	public IntersectionResult intersect( Ray ray ) 
 	{
 		Vector beam = new Vector ( ray.getPosition() , Center  ) ;
 		double p =  beam.dot( ray.getDirection() );
@@ -54,5 +54,4 @@ public class Sphere extends Shape
 		// Return intersection characteristics
 		return new IntersectionResult(Intersection, Normal, Material) ;
 	}
-
 }
