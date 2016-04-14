@@ -8,56 +8,49 @@ import javax.imageio.ImageIO;
 
 public class Renderer 
 {
-	Scene Scene ; 
+	private Scene Scene ; 
+	private int RecursionDepth ; 
 	
-	int Width ; 
-	int Height ; 
-	
-	double InverseWidth ;
-	double InverseHeight ;
-	
-	int RecursionDepth ; 
-	
-	public Renderer ( Scene Scene , int Width , int Height , int RecursionDepth )
-	{
-		this.Width = Width ; 
-		this.Height = Height ; 
-		
-		this.InverseWidth = 1.0f /(double)Width ; 
-		this.InverseHeight = 1.0f /(double)Height ;
-		
+	public Renderer ( Scene Scene , int RecursionDepth )
+	{	
 		this.Scene = Scene ;
 		this.RecursionDepth = RecursionDepth ; 
-		
 	}
 	
-	public Vector Trace ( Ray ray , int depth )
-	{
-		// Normalize the ray direction
-		ray.normalize() ;
-		
+	public IntersectionResult findClosestIntersection( Ray ray )
+	{		
 		// Check closest intersection with other Objects
 		List<Shape> Objects = Scene.getObjects() ;
 		IntersectionResult ClosestIntersection = new IntersectionResult() ;
 		IntersectionResult Intersection ; 
 		double tmin = Double.MAX_VALUE ;
-		
+				
 		for ( int i = 0 ; i < Objects.size() ; i++ )
 		{
 			Intersection = Objects.get(i).intersect(ray) ;
-			
+					
 			if ( Intersection.getIntersection() != null )
 			{
-				 Vector aux = new Vector ( ray.getPosition() , Intersection.getIntersection()  );
-				 double t =   aux.norm2();
-				 
-				 if ( t < tmin && t > 0.0001f ) // && t > 0.000001f
-				 {
-					 ClosestIntersection = Intersection ; 
-					 tmin = t ; 
-				 } 
+					Vector aux = new Vector ( ray.getPosition() , Intersection.getIntersection()  );
+					double t =   aux.norm2();
+						 
+					if ( t < tmin && t > 0.0001f ) 
+					{
+							 ClosestIntersection = Intersection ; 
+							 tmin = t ; 
+					} 
 			}
 		}
+				
+		return ClosestIntersection ; 
+	}
+	
+	public Vector Trace ( Ray ray , int depth )
+	{
+		// Normalize ray direction
+		ray.normalize();
+		
+		IntersectionResult ClosestIntersection = findClosestIntersection( ray ) ; 
 				
 		if ( ClosestIntersection.getIntersection() == null ) // No intersection
 		{
@@ -95,23 +88,12 @@ public class Renderer
 			// Vector from Surface to Light
 			Vector L = new Vector ( Inter, cur.getPosition() ) ;
 			double distance = L.norm() ; L = L.normalize();
+			
+			// Normalized ShadowRay
+			Ray Shadowray = new Ray ( Inter , L ) ; 
+			Shadowray.normalize(); 
 					
-			Ray shadowray = new Ray ( Inter , L ) ; 
-					
-			boolean LightObstruction = false ; 
-					
-			for ( int j = 0 ; j < Objects.size() ; j++ )
-			{
-				IntersectionResult aux = Objects.get(j).intersect(shadowray) ;
-				
-				if (  aux.getIntersection() != null  )
-				{
-					LightObstruction = true ; 
-					break;
-				}
-			}
-					
-			if ( !LightObstruction )
+			if ( findClosestIntersection( Shadowray ).getIntersection() == null ) // No Light Obstruction
 			{
 				Vector LightColor = new Vector ( cur.getColor() ) ;
 				Vector R = N.prod(2.0f*N.dot(L)).diff(L) ;
@@ -122,10 +104,10 @@ public class Renderer
 				FinalColor = FinalColor.sum( LightColor.times( m.getDiffuseComponent().prod( Math.max(0.0f, L.dot(N) ) ) ) ) ; 
 				
 				// Specular component 
-				FinalColor = FinalColor.sum( m.getSpecularComponent().prod( ( float ) Math.pow( ( double )( Math.max( 0.0f , R.dot(V) ) ) , ( double ) m.getPhongIndex() ) ) ) ;
+				FinalColor = FinalColor.sum( m.getSpecularComponent().prod( Math.pow( ( Math.max( 0.0f , R.dot(V) ) ) , m.getPhongIndex() ) ) ) ;
 				
 				// Attenuation
-				FinalColor = FinalColor.prod( 70.0f / distance ) ;
+				FinalColor = FinalColor.prod( 8000.0f / distance ) ;
 			}
 		}
 				
@@ -140,16 +122,16 @@ public class Renderer
 	
 	public void writeImage ( String imagename )
 	{
+		   // Set camera conditions
+	       Camera Camera = Scene.getCamera() ;
+
+	       int Width = Camera.getWidth() ; 
+	       int Height = Camera.getHeight()  ;
+	       
+	       // Create image
 	       BufferedImage image;
-	       // create image
 	       image = new BufferedImage(Width, Height,BufferedImage.TYPE_INT_ARGB ) ;
 	       
-	       // Set camera conditions
-	       Camera Camera = Scene.getCamera() ;
-	       double Angle = Camera.getAngle() ; 
-	       double  WidhtHeightRatio = Camera.getWidthHeightRatio() ;
-	       Point3D Position = new Point3D ( 0.0f , 0.0f , 0.0f ) ;
-	        
 	       //Writing image
 	       Color color ; 
 	       Vector v ;
@@ -158,12 +140,10 @@ public class Renderer
 	       {
 	    	   for ( int x = 0 ; x < Width ; x++ )
 	    	   {
-	    		   double dx = (2.0f * (( x  + 0.5f) * InverseWidth) - 1.0f) * Angle * WidhtHeightRatio;
-	    		   double dy = (1.0f - 2.0f * ((y + 0.5f) * InverseHeight)) * Angle ;
+	    		   // Throw ray from camera into each pixel
 	    		   
-	    		   // Throw light ray into into each pixel
-	    		   Vector dir = new Vector ( dx , dy , -1.0f ) ; dir.normalize() ;
-	    		   Ray EyeRay = new Ray (  Position ,  dir ) ; 
+	    		   Ray EyeRay = Camera.getRay( x + 1 - Width/2 ,  Height/2 - y - 1 ) ;
+	    		   EyeRay.normalize();
 	    		   
 	    		   // Calculate the final color obtained by Ray Tracing algorithm
 	    		   v = Trace ( EyeRay , 0 ).saturate() ; 
@@ -180,5 +160,5 @@ public class Renderer
 	       try{ ImageIO.write(image, "png", f); } catch (IOException ex) 
 	       { ex.printStackTrace(); }
 	   }
-	
 }
+
