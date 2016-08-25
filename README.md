@@ -1,4 +1,7 @@
 # RayTracer
+
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)   
+
 Basic implementation of RayTracer algorithm for learning purposes
 
 ![Alt text](https://github.com/Alfo5123/RayTracer/blob/master/Images/Image_01 "Example 1")
